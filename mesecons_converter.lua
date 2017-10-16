@@ -22,6 +22,7 @@ local function formspec(meta)
 end	
 
 local function send_message(pos, topic, payload)
+	print("send", topic, payload)
 	local meta = minetest.get_meta(pos)
 	local owner = meta:get_string("owner")
 	local numbers = meta:get_string("numbers")
@@ -57,7 +58,8 @@ minetest.register_node("tubelib_addons2:mesecons_converter", {
 		meta:set_string("formspec", formspec(meta))
 		meta:set_string("infotext", "Tubelib Mesecons Converter "..own_number..": not connected")
 		meta:set_string("owner", placer:get_player_name())
-		meta:set_int("overload_cnt", 0)
+		-- send_message is called 24 times after the node is placed
+		meta:set_int("overload_cnt", -24)
 		minetest.get_node_timer(pos):start(1)
 	end,
 
@@ -106,9 +108,16 @@ minetest.register_node("tubelib_addons2:mesecons_converter", {
 		return true
 	end,
 	
+	after_dig_node = function(pos)
+		tubelib.remove_node(pos)
+	end,
+
+	paramtype = "light",
+	sunlight_propagates = true,
 	paramtype2 = "facedir",
 	groups = {cracky=2, crumbly=2},
 	is_ground_content = false,
+	sounds = default.node_sound_stone_defaults(),
 })
 
 

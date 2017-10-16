@@ -14,20 +14,6 @@
 
 local CYCLE_TIME = 8
 
-local function switch_on(pos, node)
-	local meta = minetest.get_meta(pos)
-	local number = meta:get_string("number")
-	local placer_name = meta:get_string("placer_name")
-	tubelib.send_message(number, placer_name, nil, "start", nil)
-end
-
-local function switch_off(pos)
-	local meta = minetest.get_meta(pos)
-	local number = meta:get_string("number")
-	local placer_name = meta:get_string("placer_name")
-	tubelib.send_message(number, placer_name, nil, "stop", nil)
-end
-
 local tTime = {
 	["00:00"] = 1, ["02:00"] = 2, ["04:00"] = 3, 
 	["06:00"] = 4, ["08:00"] = 5, ["10:00"] = 6,
@@ -41,9 +27,11 @@ local tAction = {
 	[""] = 1,
 	["start"] = 2,
 	["stop"] = 3,
+	["on"] = 4,
+	["off"] = 5,
 }
 
-local sAction = ",start,stop"
+local sAction = ",start,stop,on,off"
 
 local function formspec(events, numbers, actions)
 	return "size[8,8]"..
@@ -172,7 +160,14 @@ minetest.register_node("tubelib_addons2:timer", {
 	
 	on_timer = check_rules,
 
+	after_dig_node = function(pos)
+		tubelib.remove_node(pos)
+	end,
+
+	paramtype = "light",
 	paramtype2 = "facedir",
+	sunlight_propagates = true,
+	sounds = default.node_sound_stone_defaults(),
 	groups = {cracky=2, crumbly=2},
 	is_ground_content = false,
 })

@@ -67,9 +67,16 @@ minetest.register_node("tubelib_addons2:repeater", {
 		return true
 	end,
 	
+	after_dig_node = function(pos)
+		tubelib.remove_node(pos)
+	end,
+
+	paramtype = "light",
+	sunlight_propagates = true,
 	paramtype2 = "facedir",
 	groups = {cracky=2, crumbly=2},
 	is_ground_content = false,
+	sounds = default.node_sound_stone_defaults(),
 })
 
 
