@@ -14,17 +14,20 @@
 
 local sTextures = "Wood,Aspen Wood,Jungle Wood,Pine Wood,"..
                   "Cobblestone,Sandstone,Stone,Desert Sandstone,"..
-                  "Copper,Steel,Tin,Coral" 
+                  "Copper,Steel,Tin,Coral,"..
+				  "Glas,Obsidian Glas"  
 
 local tTextures = {
 	["Wood"]=1, ["Aspen Wood"]=2, ["Jungle Wood"]=3, ["Pine Wood"]=4,
 	["Cobblestone"]=5, ["Sandstone"]=6, ["Stone"]=7, ["Desert Sandstone"]=8,
 	["Copper"]=9, ["Steel"]=10, ["Tin"]=11, ["Coral"]=12,
+	["Glas"]=13, ["Obsidian Glas"]=14,
 }
 	
 local tPgns = {"default_wood.png", "default_aspen_wood.png", "default_junglewood.png", "default_pine_wood.png",
 	"default_cobble.png", "default_sandstone.png", "default_stone.png", "default_desert_sandstone.png",
-	"default_copper_block.png", "default_steel_block.png", "default_tin_block.png", "default_coral_skeleton.png"}
+	"default_copper_block.png", "default_steel_block.png", "default_tin_block.png", "default_coral_skeleton.png",
+	"default_glass.png", "default_obsidian_glass.png"}
 
 local not_in_inventory=nil
 for idx,pgn in ipairs(tPgns) do
@@ -61,6 +64,7 @@ for idx,pgn in ipairs(tPgns) do
 			tubelib.remove_node(pos)
 		end,
 
+		drawtype = "glasslike",
 		paramtype = "light",
 		paramtype2 = "facedir",
 		sunlight_propagates = true,
@@ -75,9 +79,9 @@ for idx,pgn in ipairs(tPgns) do
 	tubelib.register_node("tubelib_addons2:gateblock"..idx, {}, {
 		on_recv_message = function(pos, topic, payload)
 			local node = minetest.get_node(pos)
-			if topic == "on" then
+			if topic == "on" or topic == "start" then
 				minetest.remove_node(pos)
-			elseif topic == "off" then
+			elseif topic == "off" or topic == "stop" then
 				local num = tubelib.get_node_number(pos)
 				local info = tubelib.get_node_info(num)
 				if info then

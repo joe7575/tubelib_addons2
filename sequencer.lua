@@ -20,10 +20,6 @@ local sAction = ",start,stop,on,off"
 local kvAction = {[""]=1, ["start"]=2, ["stop"]=3, ["on"]=4, ["off"]=5}
 local tAction = {nil,"start","stop", "on", "off"}
 
-local sOffset = ",1,2,3,4,8,15,30,60,120,240,480"
-local kvOffset = {[""]=1, ["1"]=2, ["2"]=3, ["3"]=4, ["4"]=5, ["8"]=6, ["15"]=7, ["30"]=8, ["60"]=9, ["120"]=10, ["240"]=11, ["480"]=12}
-local tOffset = {nil,1,2,3,4,8,15,30,60,120,240,480}
-
 local function formspec(state, rules, endless)
 	endless = endless == 1 and "true" or "false"
 	local tbl = {"size[8,9.2]"..
@@ -35,7 +31,7 @@ local function formspec(state, rules, endless)
 	for idx, rule in ipairs(rules) do
 		tbl[#tbl+1] = "field[0.2,"..(-0.2+idx)..";2,1;num"..idx..";;"..(rule.num or "").."]"
 		tbl[#tbl+1] = "dropdown[2,"..(-0.4+idx)..";3.9,1;act"..idx..";"..sAction..";"..(rule.act or "").."]"
-		tbl[#tbl+1] = "dropdown[6,"..(-0.4+idx)..";2,1;offs"..idx..";"..sOffset..";"..(rule.offs or "").."]"
+		tbl[#tbl+1] = "field[6.2,"..(-0.2+idx)..";2,1;offs"..idx..";;"..(rule.offs or "").."]"
 	end
 	tbl[#tbl+1] = "checkbox[0,8.5;endless;Run endless;"..endless.."]"
 	tbl[#tbl+1] = "image_button[5,8.5;1,1;".. tubelib.state_button(state) ..";button;]"
@@ -52,10 +48,10 @@ local function formspec_help()
 		"label[2,0;Sequencer Help]"..
 		"label[0,1;Define a sequence of commands\nto control other machines.]"..
 		"label[0,2.2;Numbers(s) are the node numbers,\nthe command shall sent to.]"..
-		"label[0,3.4;The command 'start' can also be used\nto switch a node ON.]"..
-		"label[0,4.6;Offset is the time to the\nnext line in seconds.]"..
+		"label[0,3.4;The commands 'start'/'stop' are used\nfor machines, 'on'/'off' for all other nodes.]"..
+		"label[0,4.6;Offset is the time to the\nnext line in seconds (0..999).]"..
 		"label[0,5.8;If endless is set, the Sequencer\nrestarts again and again.]"..
-		"label[0,7;The command ' ' does nothing,\nonly consuming the offset time.]"..
+		"label[0,7;The command '  ' does nothing,\nonly consuming the offset time.]"..
 		"button[3,8;2,1;exit;close]"
 end
 
@@ -74,7 +70,7 @@ end
 
 local function get_next_slot(idx, rules, endless)
 	idx = idx + 1
-	if idx <= #rules and rules[idx].offs ~= 1 and rules[idx].num ~= "" then
+	if idx <= #rules and rules[idx].offs ~= "" and rules[idx].num ~= "" then
 		return idx
 	elseif endless == 1 then
 		return 1
@@ -87,7 +83,9 @@ local function restart_timer(pos, time)
 	if timer:is_started() then
 		timer:stop()
 	end
-	timer:start(time)
+	if type(time) == "number" then
+		timer:start(time)
+	end
 end	
 
 local function check_rules(pos, elapsed)
@@ -99,17 +97,25 @@ local function check_rules(pos, elapsed)
 		local number = meta:get_string("number")
 		local endless = meta:get_int("endless") or 0
 		local placer_name = meta:get_string("placer_name")
-		local rule = rules[index]
-		local offs = tOffset[rules[index].offs]
-		tubelib.send_message(rule.num, placer_name, nil, tAction[rule.act], nil)
-		index = get_next_slot(index, rules, endless)
-		if index ~= nil and offs ~= nil and running == 1 then
-			meta:set_string("infotext", "Tubelib Sequencer "..number..": running ("..index.."/"..NUM_SLOTS..")")
-			meta:set_int("index", index)
-			minetest.after(0, restart_timer, pos, offs)
-			return false
-		else
-			return stop_the_sequencer(pos)
+		while true do -- process all rules as long as offs == 0
+			local rule = rules[index]
+			local offs = rules[index].offs
+			tubelib.send_message(rule.num, placer_name, nil, tAction[rule.act], nil)
+			index = get_next_slot(index, rules, endless)
+			if index ~= nil and offs ~= nil and running == 1 then
+				-- after the last rule a pause with 2 or more sec is required
+				if index == 1 and offs < 2 then
+					offs = 2
+				end
+				meta:set_string("infotext", "Tubelib Sequencer "..number..": running ("..index.."/"..NUM_SLOTS..")")
+				meta:set_int("index", index)
+				if offs > 0 then
+					minetest.after(0, restart_timer, pos, offs)
+					return false
+				end
+			else
+				return stop_the_sequencer(pos)
+			end
 		end
 	end
 	return false
@@ -125,7 +131,7 @@ local function start_the_sequencer(pos)
 	local rules = minetest.deserialize(meta:get_string("rules"))
 	local endless = meta:get_int("endless") or 0
 	meta:set_string("formspec", formspec(tubelib.RUNNING, rules, endless))
-	minetest.get_node_timer(pos):start(2)
+	minetest.get_node_timer(pos):start(0.1)
 	return false
 end
 
@@ -157,7 +163,7 @@ local function 	on_receive_fields(pos, formname, fields, player)
 
 	for idx = 1,NUM_SLOTS do
 		if fields["offs"..idx] ~= nil then
-			rules[idx].offs = kvOffset[fields["offs"..idx]]
+			rules[idx].offs = tonumber(fields["offs"..idx]) or ""
 		end
 		if fields["num"..idx] ~= nil and tubelib.check_numbers(fields["num"..idx]) then
 			rules[idx].num = fields["num"..idx]
@@ -196,7 +202,7 @@ minetest.register_node("tubelib_addons2:sequencer", {
 		local number = tubelib.add_node(pos, "tubelib_addons2:sequencer")
 		local rules = {}
 		for idx = 1,NUM_SLOTS do
-			rules[idx] = {offs = 1, num = "", act = 1}
+			rules[idx] = {offs = "", num = "", act = 1}
 		end
 		meta:set_string("placer_name", placer:get_player_name())
 		meta:set_string("rules", minetest.serialize(rules))
@@ -235,7 +241,8 @@ minetest.register_node("tubelib_addons2:sequencer", {
 minetest.register_craft({
 	output = "tubelib_addons2:sequencer",
 	recipe = {
-		{"tubelib:button", "default:mese_crystal", "default:mese_crystal"},
+		{"tubelib:button"},
+		{"default:mese_crystal"},
 	},
 })
 
@@ -252,3 +259,16 @@ minetest.register_lbm({
 		end
 	end
 })
+
+tubelib.register_node("tubelib_addons2:sequencer", {}, {
+	on_recv_message = function(pos, topic, payload)
+		local node = minetest.get_node(pos)
+		if topic == "start" or topic == "on" then
+			start_the_sequencer(pos)
+		elseif topic == "stop" or topic == "off" then
+			-- do not stop immediately
+			local meta = minetest.get_meta(pos)
+			meta:set_int("endless", 0)
+		end
+	end,
+})		
