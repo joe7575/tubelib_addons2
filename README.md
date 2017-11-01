@@ -1,6 +1,6 @@
-# Tubelib Extension with Communication Blocks \[tubelib_addons2\]
+# Tubelib Extension with Control Blocks \[tubelib_addons2\]
 
-This extension provides Repeater, Timer, Controller, Mesecons Converter and others communication blocks.
+This extension provides Repeater, Timer, Sequencer, Mesecons Converter, Lamp, Door, Gate, and others Control items with tubelib communication support.
 
 
 Browse on: ![GitHub](https://github.com/joe7575/tubelib_addons2)

@@ -63,9 +63,10 @@ local function program_numbers(itemstack, placer, pointed_thing)
 	end
 end
 
-minetest.register_node("tubelib_addons2:programmer", {
+minetest.register_craftitem("tubelib_addons2:programmer", {
 	description = "Tubelib Programmer",
 	inventory_image = "tubelib_addons2_programmer.png",
+	stack_max = 1,
 	wield_image = "tubelib_addons2_programmer_wield.png",
 	groups = {cracky=1, book=1},
 	-- left mouse button = program
@@ -75,3 +76,11 @@ minetest.register_node("tubelib_addons2:programmer", {
 	on_place = read_number,
 })
 
+minetest.register_craft({
+	output = "tubelib_addons2:programmer",
+	recipe = {
+		{"", "default:steel_ingot",      ""},
+		{"", "tubelib_addons2:wlanchip", ""},
+		{"", "dye:red",                  ""},
+	},
+})

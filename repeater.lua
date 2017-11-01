@@ -83,7 +83,9 @@ minetest.register_node("tubelib_addons2:repeater", {
 minetest.register_craft({
 	output = "tubelib_addons2:repeater",
 	recipe = {
-		{"tubelib:button", "default:gold_ingot"},
+		{"", "group:wood", ""},
+		{"tubelib_addons2:wlanchip", "", "tubelib_addons2:wlanchip"},
+		{"", "group:wood", ""},
 	},
 })
 

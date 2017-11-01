@@ -25,13 +25,11 @@ local sTime = "00:00,02:00,04:00,06:00,08:00,10:00,12:00,14:00,16:00,18:00,20:00
 
 local tAction = {
 	[""] = 1,
-	["start"] = 2,
-	["stop"] = 3,
-	["on"] = 4,
-	["off"] = 5,
+	["on"] = 2,
+	["off"] = 3,
 }
 
-local sAction = ",start,stop,on,off"
+local sAction = ",on,off"
 
 local function formspec(events, numbers, actions)
 	return "size[8,8]"..
@@ -124,8 +122,7 @@ minetest.register_node("tubelib_addons2:timer", {
 
 	on_receive_fields = function(pos, formname, fields, player)
 		local meta = minetest.get_meta(pos)
-		local placer_name = meta:get_string("placer_name")
-		if placer_name ~= player:get_player_name() then
+		if minetest.is_protected(pos, player:get_player_name()) then
 			return
 		end
 		
@@ -180,3 +177,26 @@ minetest.register_craft({
 	},
 })
 
+minetest.register_lbm({
+	label = "[Tubelib] Timer update",
+	name = "tubelib_addons2:update",
+	nodenames = {"tubelib_addons2:timer"},
+	run_at_every_load = false,
+	action = function(pos, node)
+		local meta = minetest.get_meta(pos)
+		local events = minetest.deserialize(meta:get_string("events"))
+		local numbers = minetest.deserialize(meta:get_string("numbers"))
+		local actions = {}
+		for _,a in ipairs(minetest.deserialize(meta:get_string("actions"))) do
+			if a == "start" then
+				actions[#actions+1] = "on"
+			elseif a == "stop" then
+				actions[#actions+1] = "off"
+			else
+				actions[#actions+1] = a
+			end
+		end
+		meta:set_string("actions", minetest.serialize(actions))
+		meta:set_string("formspec", formspec(events, numbers, actions))
+	end
+})

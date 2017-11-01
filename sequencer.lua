@@ -16,9 +16,9 @@ local RUNNING_STATE = 1
 local STOP_STATE = 0
 local NUM_SLOTS = 8
 
-local sAction = ",start,stop,on,off"
-local kvAction = {[""]=1, ["start"]=2, ["stop"]=3, ["on"]=4, ["off"]=5}
-local tAction = {nil,"start","stop", "on", "off"}
+local sAction = ",on,off"
+local kvAction = {[""]=1, ["on"]=2, ["off"]=3}
+local tAction = {nil, "on", "off"}
 
 local function formspec(state, rules, endless)
 	endless = endless == 1 and "true" or "false"
@@ -48,7 +48,7 @@ local function formspec_help()
 		"label[2,0;Sequencer Help]"..
 		"label[0,1;Define a sequence of commands\nto control other machines.]"..
 		"label[0,2.2;Numbers(s) are the node numbers,\nthe command shall sent to.]"..
-		"label[0,3.4;The commands 'start'/'stop' are used\nfor machines, 'on'/'off' for all other nodes.]"..
+		"label[0,3.4;The commands 'on'/'off' are used\n for machines and other nodes.]"..
 		"label[0,4.6;Offset is the time to the\nnext line in seconds (0..999).]"..
 		"label[0,5.8;If endless is set, the Sequencer\nrestarts again and again.]"..
 		"label[0,7;The command '  ' does nothing,\nonly consuming the offset time.]"..
@@ -138,8 +138,7 @@ end
 local function 	on_receive_fields(pos, formname, fields, player)
 	local meta = minetest.get_meta(pos)
 	local running = meta:get_int("running")
-	local placer_name = meta:get_string("placer_name")
-	if placer_name ~= player:get_player_name() then
+	if minetest.is_protected(pos, player:get_player_name()) then
 		return
 	end
 	
@@ -241,31 +240,18 @@ minetest.register_node("tubelib_addons2:sequencer", {
 minetest.register_craft({
 	output = "tubelib_addons2:sequencer",
 	recipe = {
-		{"tubelib:button"},
-		{"default:mese_crystal"},
+		{"group:wood", "group:wood", ""},
+		{"default:mese_crystal", "tubelib_addons2:wlanchip", ""},
+		{"group:wood", "group:wood", ""},
 	},
-})
-
-minetest.register_lbm({
-	label = "[Tubelib] Start Sequencer",
-	name = "tubelib_addons2:sequencer",
-	nodenames = {"tubelib_addons2:sequencer"},
-	run_at_every_load = true,
-	action = function(pos, node)
-		local meta = minetest.get_meta(pos)
-		local running = meta:get_int("running")
-		if running == 1 then
-			minetest.after(2, check_rules, pos)
-		end
-	end
 })
 
 tubelib.register_node("tubelib_addons2:sequencer", {}, {
 	on_recv_message = function(pos, topic, payload)
 		local node = minetest.get_node(pos)
-		if topic == "start" or topic == "on" then
+		if topic == "on" then
 			start_the_sequencer(pos)
-		elseif topic == "stop" or topic == "off" then
+		elseif topic == "off" then
 			-- do not stop immediately
 			local meta = minetest.get_meta(pos)
 			meta:set_int("endless", 0)

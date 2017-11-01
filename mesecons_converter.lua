@@ -35,7 +35,7 @@ local function send_message(pos, topic, payload)
 		return
 	else
 		if topic == "change" then
-			topic = meta:get_string("state") == "start" and "stop" or "start"
+			topic = meta:get_string("state") == "on" and "off" or "on"
 		end
 		tubelib.send_message(numbers, owner, nil, topic, payload)
 	end
@@ -91,10 +91,10 @@ minetest.register_node("tubelib_addons2:mesecons_converter", {
 		effector = {
 			rules = mesecon.rules.default,
 			action_on = function (pos, node)
-				send_message(pos, "start", nil)
+				send_message(pos, "on", nil)
 			end,
 			action_off = function (pos, node)
-				send_message(pos, "stop", nil)
+				send_message(pos, "off", nil)
 			end,
 			action_change = function (pos, node)
 				send_message(pos, "change", nil)
@@ -130,9 +130,9 @@ minetest.register_craft({
 
 tubelib.register_node("tubelib_addons2:mesecons_converter", {}, {
 	on_recv_message = function(pos, topic, payload)
-		if topic == "start" then
+		if topic == "on" then
 			mesecon.receptor_on(pos, mesecon.rules.default)
-		elseif topic == "stop" then
+		elseif topic == "off" then
 			mesecon.receptor_off(pos, mesecon.rules.default)
 		elseif topic == "set_numbers" then
 			local meta = minetest.get_meta(pos)

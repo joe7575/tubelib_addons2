@@ -13,7 +13,7 @@
 ]]--
 
 local tColors = {"#0000FF", "#00FFFF", "#00FF00", "#FFFF00", "#FF0000", "#FF00FF",
-				"#7F0000", "#007F00", "#00007F", "#FFFF80", "#FFE1AA", "#AAD5FF"}
+				 "#FFFFFF", "#000000", "#3BC23B", "#CA3131", "#FFA500", "#FFC0CB"}
 local sColor = "1,2,3,4,5,6,7,8,9,10,11,12"
 
 local function switch_node(pos, num, player)
@@ -34,7 +34,7 @@ end
 minetest.register_node("tubelib_addons2:lamp", {
 	description = "Tubelib Color Lamp",
 	tiles = {
-		'tubelib_addons2_lamp.png',
+		"tubelib_addons2_lamp_on.png^[colorize:#FFFFFF:120",
 	},
 
 	after_place_node = function(pos, placer)
@@ -86,9 +86,9 @@ tubelib.register_node("tubelib_addons2:lamp", {}, {
 minetest.register_craft({
 	output = "tubelib_addons2:lamp 4",
 	recipe = {
-		{"wool:green",    "wool:red",           "wool:blue"},
-		{"tubelib:tube1", "default:coal_lump",  ""},
-		{"group:wood",    "",                   "group:wood"},
+		{"wool:green",               "wool:red",           "wool:blue"},
+		{"tubelib_addons2:wlanchip", "default:coal_lump",  ""},
+		{"group:wood",               "",                   "group:wood"},
 	},
 })
 
@@ -96,7 +96,8 @@ for idx,color in ipairs(tColors) do
 	minetest.register_node("tubelib_addons2:lamp"..idx, {
 		description = "Tubelib Color Lamp",
 		tiles = {
-			"tubelib_lamp.png^[colorize:"..color..":255",
+			"tubelib_addons2_lamp_on.png^[colorize:"..color..":120",
+			--"tubelib_lamp.png^[colorize:"..color,
 		},
 
 		on_receive_fields = function(pos, formname, fields, player)
