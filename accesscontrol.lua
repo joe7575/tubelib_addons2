@@ -139,7 +139,7 @@ minetest.register_node("tubelib_addons2:accesscontrol", {
 minetest.register_craft({
 	output = "tubelib_addons2:accesscontrol",
 	recipe = {
-		{"group:steelblock", "tubelib_addons2:wlanchip"},
+		{"default:steelblock", "tubelib_addons2:wlanchip"},
 	},
 })
 
