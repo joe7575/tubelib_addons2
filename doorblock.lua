@@ -35,7 +35,7 @@ local tTextures = {
 	["Glas"]=13, ["Obsidian Glas"]=14,
 }
 	
-local tPgns = {"tubelib_addon2_gate.png", "default_aspen_wood.png", "default_junglewood.png", "default_pine_wood.png",
+local tPgns = {"tubelib_addon2_door.png", "default_aspen_wood.png", "default_junglewood.png", "default_pine_wood.png",
 	"default_cobble.png", "default_sandstone.png", "default_stone.png", "default_desert_sandstone.png",
 	"default_copper_block.png", "default_steel_block.png", "default_tin_block.png", "default_coral_skeleton.png",
 	"default_glass.png", "default_obsidian_glass.png"}

@@ -34,7 +34,7 @@ end
 minetest.register_node("tubelib_addons2:lamp", {
 	description = "Tubelib Color Lamp",
 	tiles = {
-		"tubelib_addons2_lamp_on.png^[colorize:#FFFFFF:120",
+		"tubelib_addons2_lamp.png^[colorize:#FFFFFF:120",
 	},
 
 	after_place_node = function(pos, placer)
@@ -96,7 +96,7 @@ for idx,color in ipairs(tColors) do
 	minetest.register_node("tubelib_addons2:lamp"..idx, {
 		description = "Tubelib Color Lamp",
 		tiles = {
-			"tubelib_addons2_lamp_on.png^[colorize:"..color..":120",
+			"tubelib_addons2_lamp.png^[colorize:"..color..":120",
 			--"tubelib_lamp.png^[colorize:"..color,
 		},
 

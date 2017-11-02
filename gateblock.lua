@@ -15,21 +15,20 @@
 local sTextures = "Wood,Aspen Wood,Jungle Wood,Pine Wood,"..
                   "Cobblestone,Sandstone,Stone,Desert Sandstone,"..
                   "Copper,Steel,Tin,Coral,"..
-				  "Glas,Obsidian Glas"  
+				  "Glas,Obsidian Glas,Gate Wood"  
 
 local tTextures = {
 	["Wood"]=1, ["Aspen Wood"]=2, ["Jungle Wood"]=3, ["Pine Wood"]=4,
 	["Cobblestone"]=5, ["Sandstone"]=6, ["Stone"]=7, ["Desert Sandstone"]=8,
 	["Copper"]=9, ["Steel"]=10, ["Tin"]=11, ["Coral"]=12,
-	["Glas"]=13, ["Obsidian Glas"]=14,
+	["Glas"]=13, ["Obsidian Glas"]=14, ["Gate Wood"]=15,
 }
 	
 local tPgns = {"default_wood.png", "default_aspen_wood.png", "default_junglewood.png", "default_pine_wood.png",
 	"default_cobble.png", "default_sandstone.png", "default_stone.png", "default_desert_sandstone.png",
 	"default_copper_block.png", "default_steel_block.png", "default_tin_block.png", "default_coral_skeleton.png",
-	"default_glass.png", "default_obsidian_glass.png"}
+	"default_glass.png", "default_obsidian_glass.png", "tubelib_addon2_gate.png"}
 
-local not_in_inventory=nil
 for idx,pgn in ipairs(tPgns) do
 	minetest.register_node("tubelib_addons2:gateblock"..idx, {
 		description = "Tubelib Gate Block",
@@ -41,7 +40,7 @@ for idx,pgn in ipairs(tPgns) do
 			meta:set_string("infotext", "Tubelib Gate Block "..number)
 			meta:set_string("formspec", "size[3,2]"..
 			"label[0,0;Select texture]"..
-			"dropdown[0,0.5;3;type;"..sTextures..";1]".. 
+			"dropdown[0,0.5;3;type;"..sTextures..";15]".. 
 			"button_exit[0.5,1.5;2,1;exit;Save]")
 		end,
 
@@ -67,9 +66,9 @@ for idx,pgn in ipairs(tPgns) do
 		paramtype2 = "facedir",
 		sunlight_propagates = true,
 		sounds = default.node_sound_stone_defaults(),
-		groups = {cracky=1, not_in_creative_inventory=not_in_inventory},
+		groups = {cracky=1, not_in_creative_inventory = idx==15 and 0 or 1},
 		is_ground_content = false,
-		drop = "tubelib_addons2:gateblock1",
+		drop = "tubelib_addons2:gateblock15",
 	})
 
 	not_in_inventory = 1
@@ -91,7 +90,7 @@ for idx,pgn in ipairs(tPgns) do
 end
 
 minetest.register_craft({
-	output = "tubelib_addons2:gateblock1 4",
+	output = "tubelib_addons2:gateblock15 4",
 	recipe = {
 		{"group:wood",               "group:wood", ""},
 		{"tubelib_addons2:wlanchip", "group:wood", ""},
