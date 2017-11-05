@@ -1,2 +1,2 @@
-Tubelib Extension with communication blocks
+Tubelib Extension for switching/controlling tasks
 

@@ -22,7 +22,6 @@ local function formspec(meta)
 end	
 
 local function send_message(pos, topic, payload)
-	print("send", topic, payload)
 	local meta = minetest.get_meta(pos)
 	local owner = meta:get_string("owner")
 	local numbers = meta:get_string("numbers")

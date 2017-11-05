@@ -18,7 +18,6 @@ local function switch_on(pos, meta)
 			gain = 0.5,
 			max_hear_distance = 5,
 		})
-	print("match")
 	local numbers = meta:get_string("numbers")
 	local placer_name = meta:get_string("placer_name")
 	tubelib.send_message(numbers, placer_name, nil, "on", nil)
@@ -87,7 +86,6 @@ minetest.register_node("tubelib_addons2:accesscontrol", {
 
 	on_receive_fields = function(pos, formname, fields, player)
 		local meta = minetest.get_meta(pos)
-		print(dump(fields))
 		if meta:get_string("code") == "" then
 			if fields.numbers ~= "" and fields.code ~= "" then
 				if tubelib.check_numbers(fields.numbers) then
@@ -145,7 +143,6 @@ minetest.register_craft({
 
 tubelib.register_node("tubelib_addons2:accesscontrol", {}, {
 	on_recv_message = function(pos, topic, payload)
-		print(topic, payload)
 		if topic == "set_numbers" then
 			local meta = minetest.get_meta(pos)
 			meta:set_string("numbers", payload)

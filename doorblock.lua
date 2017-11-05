@@ -8,20 +8,9 @@
 	LGPLv2.1+
 	See LICENSE.txt for more information
 
-	gateblock.lua:
+	doorblock.lua:
 	
 ]]--
-
-local storage = minetest.get_mod_storage()
-local Number2Facedir = minetest.deserialize(storage:get_string("Number2Facedir")) or {}
-
-local function update_mod_storage(number, facedir)
-	if number then
-		Number2Facedir[number] = facedir
-		print(number, "=", facedir)
-		storage:set_string("Number2Facedir", minetest.serialize(Number2Facedir))
-	end
-end
 
 local sTextures = "Gate Wood,Aspen Wood,Jungle Wood,Pine Wood,"..
                   "Cobblestone,Sandstone,Stone,Desert Sandstone,"..
@@ -64,7 +53,7 @@ for idx,pgn in ipairs(tPgns) do
 			local meta = minetest.get_meta(pos)
 			local node = minetest.get_node(pos)
 			local number = tubelib.add_node(pos, node.name)
-			update_mod_storage(number, node.param2)
+			tubelib.set_data(number, "facedir", node.param2)
 			meta:set_int("number", number)
 			meta:set_string("infotext", "Tubelib Door Block "..number)
 			meta:set_string("formspec", "size[3,2]"..
@@ -79,7 +68,7 @@ for idx,pgn in ipairs(tPgns) do
 			if fields.type then
 				node.name = "tubelib_addons2:doorblock"..tTextures[fields.type]
 				minetest.swap_node(pos, node)
-				tubelib.add_node(pos, node.name)
+				--tubelib.add_node(pos, node.name)
 			end
 			if fields.exit then
 				meta:set_string("formspec", nil)
@@ -87,7 +76,6 @@ for idx,pgn in ipairs(tPgns) do
 		end,
 		
 		after_dig_node = function(pos, oldnode, oldmetadata)
-			update_mod_storage(oldmetadata.number, nil)
 			tubelib.remove_node(pos)
 		end,
 
@@ -112,8 +100,9 @@ for idx,pgn in ipairs(tPgns) do
 				local num = tubelib.get_node_number(pos)
 				local info = tubelib.get_node_info(num)
 				if info then
-					print("Number2Facedir[number]", Number2Facedir[num])
-					minetest.add_node(pos, {name=info.name, paramtype2="facedir", param2=Number2Facedir[num]})
+					minetest.add_node(pos, {name=info.name, 
+							paramtype2="facedir", 
+							param2=tubelib.get_data(num, "facedir")})
 				end
 			end
 		end,
