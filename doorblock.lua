@@ -54,7 +54,7 @@ for idx,pgn in ipairs(tPgns) do
 			local node = minetest.get_node(pos)
 			local number = tubelib.add_node(pos, node.name)
 			tubelib.set_data(number, "facedir", node.param2)
-			meta:set_int("number", number)
+			meta:set_string("number", number)
 			meta:set_string("infotext", "Tubelib Door Block "..number)
 			meta:set_string("formspec", "size[3,2]"..
 			"label[0,0;Select texture]"..
@@ -65,10 +65,11 @@ for idx,pgn in ipairs(tPgns) do
 		on_receive_fields = function(pos, formname, fields, player)
 			local meta = minetest.get_meta(pos)
 			local node = minetest.get_node(pos)
+			local number = meta:get_string("number")
 			if fields.type then
 				node.name = "tubelib_addons2:doorblock"..tTextures[fields.type]
 				minetest.swap_node(pos, node)
-				--tubelib.add_node(pos, node.name)
+				tubelib.set_data(number, "texture", node.name)
 			end
 			if fields.exit then
 				meta:set_string("formspec", nil)
@@ -84,7 +85,7 @@ for idx,pgn in ipairs(tPgns) do
 		paramtype2 = "facedir",
 		sunlight_propagates = true,
 		sounds = default.node_sound_stone_defaults(),
-		groups = {cracky=1, not_in_creative_inventory=not_in_inventory},
+		groups = {cracky=2, choppy=2, crumbly=2, not_in_creative_inventory=not_in_inventory},
 		is_ground_content = false,
 		drop = "tubelib_addons2:doorblock1",
 	})
@@ -98,9 +99,9 @@ for idx,pgn in ipairs(tPgns) do
 				minetest.remove_node(pos)
 			elseif topic == "off" then
 				local num = tubelib.get_node_number(pos)
-				local info = tubelib.get_node_info(num)
-				if info then
-					minetest.add_node(pos, {name=info.name, 
+				local name = tubelib.get_data(num, "texture") or "tubelib_addons2:doorblock1"
+				if name then
+					minetest.add_node(pos, {name=name, 
 							paramtype2="facedir", 
 							param2=tubelib.get_data(num, "facedir")})
 				end
