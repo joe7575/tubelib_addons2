@@ -70,7 +70,7 @@ minetest.register_node("tubelib_addons2:lamp", {
 	paramtype = 'light',
 	sunlight_propagates = true,
 	sounds = default.node_sound_stone_defaults(),
-	groups = {cracky=1},
+	groups = {choppy=2, cracky=1},
 	is_ground_content = false,
 })
 

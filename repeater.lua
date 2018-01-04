@@ -74,7 +74,7 @@ minetest.register_node("tubelib_addons2:repeater", {
 	paramtype = "light",
 	sunlight_propagates = true,
 	paramtype2 = "facedir",
-	groups = {cracky=2, crumbly=2},
+	groups = {choppy=2, cracky=2, crumbly=2},
 	is_ground_content = false,
 	sounds = default.node_sound_stone_defaults(),
 })

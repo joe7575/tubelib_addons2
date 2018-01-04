@@ -165,7 +165,7 @@ minetest.register_node("tubelib_addons2:timer", {
 	paramtype2 = "facedir",
 	sunlight_propagates = true,
 	sounds = default.node_sound_stone_defaults(),
-	groups = {cracky=2, crumbly=2},
+	groups = {choppy=2, cracky=2, crumbly=2},
 	is_ground_content = false,
 })
 
