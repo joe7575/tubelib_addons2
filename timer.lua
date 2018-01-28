@@ -173,7 +173,9 @@ minetest.register_node("tubelib_addons2:timer", {
 minetest.register_craft({
 	output = "tubelib_addons2:timer",
 	recipe = {
-		{"tubelib:button", "default:mese_crystal"},
+		{"group:wood", "group:wood", ""},
+		{"default:gold_ingot", "tubelib:wlanchip", ""},
+		{"group:wood", "group:wood", ""},
 	},
 })
 

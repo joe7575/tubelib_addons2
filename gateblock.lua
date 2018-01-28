@@ -90,10 +90,10 @@ for idx,pgn in ipairs(tPgns) do
 end
 
 minetest.register_craft({
-	output = "tubelib_addons2:gateblock15 4",
+	output = "tubelib_addons2:gateblock15",
 	recipe = {
-		{"group:wood",               "group:wood", ""},
-		{"tubelib_addons2:wlanchip", "group:wood", ""},
+		{"group:wood",       "", ""},
+		{"tubelib:wlanchip", "", ""},
 		{"", "",""},
 	},
 })

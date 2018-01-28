@@ -79,8 +79,8 @@ minetest.register_craftitem("tubelib_addons2:programmer", {
 minetest.register_craft({
 	output = "tubelib_addons2:programmer",
 	recipe = {
-		{"", "default:steel_ingot",      ""},
-		{"", "tubelib_addons2:wlanchip", ""},
-		{"", "dye:red",                  ""},
+		{"", "default:steel_ingot", ""},
+		{"", "tubelib:wlanchip",    ""},
+		{"", "dye:red",             ""},
 	},
 })

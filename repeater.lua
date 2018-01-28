@@ -84,7 +84,7 @@ minetest.register_craft({
 	output = "tubelib_addons2:repeater",
 	recipe = {
 		{"", "group:wood", ""},
-		{"tubelib_addons2:wlanchip", "", "tubelib_addons2:wlanchip"},
+		{"tubelib:wlanchip", "", "tubelib:wlanchip"},
 		{"", "group:wood", ""},
 	},
 })

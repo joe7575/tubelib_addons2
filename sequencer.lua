@@ -241,7 +241,7 @@ minetest.register_craft({
 	output = "tubelib_addons2:sequencer",
 	recipe = {
 		{"group:wood", "group:wood", ""},
-		{"default:mese_crystal", "tubelib_addons2:wlanchip", ""},
+		{"default:mese_crystal", "tubelib:wlanchip", ""},
 		{"group:wood", "group:wood", ""},
 	},
 })

@@ -87,11 +87,11 @@ tubelib.register_node("tubelib_addons2:lamp", {}, {
 
 
 minetest.register_craft({
-	output = "tubelib_addons2:lamp 4",
+	output = "tubelib_addons2:lamp 2",
 	recipe = {
-		{"wool:green",               "wool:red",           "wool:blue"},
-		{"tubelib_addons2:wlanchip", "default:coal_lump",  ""},
-		{"group:wood",               "",                   "group:wood"},
+		{"wool:green",       "wool:red",           "wool:blue"},
+		{"tubelib:wlanchip", "default:coal_lump",  "tubelib:wlanchip"},
+		{"group:wood",       "",                   "group:wood"},
 	},
 })
 
