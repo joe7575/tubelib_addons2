@@ -15,7 +15,7 @@
 	2017-10-08  v0.04  Mesecons Converter and Programmer Tool added
 	2017-10-16  v0.05  Color Lamp added
 	2017-10-29  v0.06  WLAN Chip + Access Lock added, recipes changed
-  2017-10-29  v0.07  WLAN Chip removed, recipes changed
+	2017-10-29  v0.07  WLAN Chip removed, recipes changed
 
 ]]--
 
