@@ -74,13 +74,14 @@ local function check_rules(pos,elapsed)
 	local actions = minetest.deserialize(meta:get_string("actions"))
 	local done = minetest.deserialize(meta:get_string("done"))
 	local placer_name = meta:get_string("placer_name")
+	local number = meta:get_string("number")
 	
 	-- check all rules
 	for idx,act in ipairs(actions) do
 		if act ~= "" and numbers[idx] ~= "" then
 			local hr = (events[idx] - 1) * 2
 			if hour == hr and done[idx] == false then
-				tubelib.send_message(numbers[idx], placer_name, nil, act, nil)
+				tubelib.send_message(numbers[idx], placer_name, nil, act, number)
 				done[idx] = true
 			end
 		end
@@ -107,6 +108,8 @@ minetest.register_node("tubelib_addons2:timer", {
 
 	after_place_node = function(pos, placer)
 		local meta = minetest.get_meta(pos)
+		local number = tubelib.add_node(pos, "tubelib_addons2:timer")
+		meta:set_string("number", number)
 		local events = {1,1,1,1,1,1}
 		local numbers = {"0000","","","","",""}
 		local actions = {"","","","","",""}

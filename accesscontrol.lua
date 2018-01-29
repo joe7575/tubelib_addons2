@@ -19,8 +19,9 @@ local function switch_on(pos, meta)
 			max_hear_distance = 5,
 		})
 	local numbers = meta:get_string("numbers")
+	local number = meta:get_string("number")
 	local placer_name = meta:get_string("placer_name")
-	tubelib.send_message(numbers, placer_name, nil, "on", nil)
+	tubelib.send_message(numbers, placer_name, nil, "on", number)
 	minetest.get_node_timer(pos):start(4)
 end
 
@@ -32,8 +33,9 @@ local function switch_off(pos)
 		})
 	local meta = minetest.get_meta(pos)
 	local numbers = meta:get_string("numbers")
+	local number = meta:get_string("number")
 	local placer_name = meta:get_string("placer_name")
-	tubelib.send_message(numbers, placer_name, nil, "off", nil)
+	tubelib.send_message(numbers, placer_name, nil, "off", number)
 end
 
 local function formspec1(numbers)
@@ -77,8 +79,9 @@ minetest.register_node("tubelib_addons2:accesscontrol", {
 	},
 
 	after_place_node = function(pos, placer)
-		tubelib.add_node(pos, "tubelib_addons2:accesscontrol")
+		local number = tubelib.add_node(pos, "tubelib_addons2:accesscontrol")
 		local meta = minetest.get_meta(pos)
+		meta:set_string("number", number)
 		local numbers = meta:get_string("numbers") or ""
 		meta:set_string("formspec", formspec1(numbers))
 		meta:set_string("placer_name", placer:get_player_name())

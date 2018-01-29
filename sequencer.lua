@@ -100,7 +100,7 @@ local function check_rules(pos, elapsed)
 		while true do -- process all rules as long as offs == 0
 			local rule = rules[index]
 			local offs = rules[index].offs
-			tubelib.send_message(rule.num, placer_name, nil, tAction[rule.act], nil)
+			tubelib.send_message(rule.num, placer_name, nil, tAction[rule.act], number)
 			index = get_next_slot(index, rules, endless)
 			if index ~= nil and offs ~= nil and running == 1 then
 				-- after the last rule a pause with 2 or more sec is required
