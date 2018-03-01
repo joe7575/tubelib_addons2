@@ -46,12 +46,17 @@ end
 local function program_numbers(itemstack, placer, pointed_thing)
 	local pos = pointed_thing.under
 	if pos then
+		local meta = minetest.get_meta(pos)
 		local node_number = tubelib.get_node_number(pos)
 		local numbers = minetest.deserialize(placer:get_attribute("tubelib_prog_numbers")) or {}
 		placer:set_attribute("tubelib_prog_numbers", nil)
 		local text = join_to_string(numbers)
 		local player_name = placer:get_player_name()
-		local res = tubelib.send_request(node_number, player_name, nil, "set_numbers", text)
+		if meta and meta:get_string("owner") ~= player_name then
+			minetest.chat_send_player(player_name, "[Tubelib Programmer] foreign or unknown node!")			
+			return itemstack
+		end
+		local res = tubelib.send_request(node_number, "set_numbers", text)
 		if res == true then
 			minetest.chat_send_player(player_name, "[Tubelib Programmer] node programmed!")
 		else
