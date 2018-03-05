@@ -113,8 +113,8 @@ end
 minetest.register_craft({
 	output = "tubelib_addons2:doorblock1",
 	recipe = {
-		{"", "group:wood", ""},
-		{"", "tubelib:wlanchip", ""},
+		{"tubelib:wlanchip", "", ""},
+		{"group:wood", "", ""},
 		{"", "",""},
 	},
 })
