@@ -1,7 +1,7 @@
-<big>This Mod is now part of the Modpack ![Techpack](https://github.com/joe7575/techpack)
-This repository here is no longer maintained.</big>
+ :boom: This Mod is now part of the Modpack ![Techpack](https://github.com/joe7575/techpack)
+This repository here is no longer maintained. :boom:
 
-
+```
 # Tubelib Extension with Control Blocks \[tubelib_addons2\]
 
 This extension provides Timer, Sequencer, Repeater, Gate, Door, Access Lock, Mesecons Converter and Color Lamp nodes, all with tubelib communication support.
@@ -63,4 +63,4 @@ tubelib, default
 Copyright (C) 2017 Joachim Stolberg  
 Code: Licensed under the GNU LGPL version 2.1 or later. See LICENSE.txt and http://www.gnu.org/licenses/lgpl-2.1.txt  
 Textures: CC0
-
+```
