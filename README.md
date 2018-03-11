@@ -1,4 +1,4 @@
- :boom: This Mod is now part of the Modpack ![Techpack](https://github.com/joe7575/techpack).
+ :boom: This Mod is now part of the Modpack ![TechPack](https://github.com/joe7575/techpack).
 This repository here is no longer maintained. :boom:
 
 ```
